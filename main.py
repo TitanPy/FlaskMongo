@@ -1,37 +1,44 @@
 from flask import Flask,render_template,request,flash,redirect,url_for
-from pymongo import MongoClient
-#from flask_mongoalchemy import MongoAlchemy
-
+import pymongo
+import json
 
 app = Flask(__name__)
 app.secret_key = "abc"  
 
 # mongodb connection
-MONGO_URI = "mongodb://localhost:27017"
-client = MongoClient(MONGO_URI)
-db = client['fisioapp']
-collection = db['pacientes']
+client = pymongo.MongoClient("mongodb://localhost:27017/")
+db = client["fisioapp"]
+c_alta = db["pacientes"]
+
 
 @app.route('/altas')
 def altas():
-    return render_template("alta_form.html")
+    return render_template("altas.html")
 
-@app.route('/altas_user',methods=['POST'])
+@app.route('/altas',methods=['POST'])
 def altas_user():
     nombre = request.form.get('nombre_form')  
-    return nombre
-    """    apellidos = request.form('apellidos_form')
-    dni = request.form('dni_form')
-    mail = request.form('email_form')
-    fecha = request.form('date_form')
-    telefono = request.form('telefono_form') """
-    """   if collection.find({"dni": dni}) or collection.find({"email": mail}):
-        return 'El usuario ' + nombre + ' ' + apellidos + ' existe en la base de datos'     # será un java script
-    else:
-        collection.insert({"nombre": nombre, "apellidos": apellidos, "dni": dni, "email": mail, "fecha_nac": fecha, "telefono": telefono})
-        return 'Nueva Alta ' + nombre + ' ' + apellidos         # será un java script """
+    apellidos = request.form.get('apellidos_form')
+    dni = request.form.get('dni_form')
+    mail = request.form.get('email_form')
+    fecha = request.form.get('date_form')
+    telefono = request.form.get('telefono_form')
 
-""" 
+    if c_alta.find_one({"dni": dni}) or c_alta.find_one({"email": mail}):
+        return 'El usuario ' + nombre + ' ' + apellidos + ' existe en la base de datos' # será un java script
+    else:
+        c_alta.insert({"nombre": nombre, "apellidos": apellidos, "dni": dni, "email": mail, "fecha_nac": fecha, "telefono": telefono})
+        return 'Nueva Alta ' + nombre + ' ' + apellidos         # será un java script
+ 
+
+@app.route('/bajas_mod')
+def bajas():
+    clientes = c_alta.find()
+    for i in clientes: 
+        print(json.loads(i))
+    return render_template("bajas_mod.html", clientes=clientes)
+
+"""
 @app.route('/default/create')
 def default_create():
     pet = Pets(name="Puki", age=7)

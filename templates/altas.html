@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block body %}
+<form  method="POST" action="{{url_for('altas')}}" onsubmit="return validar();">
+    <label for="nombre">Nombre:</label>
+        <input type="text" id="nombreFormulario" name="nombre_form" autofocus required><br>
+    <label for="apellidos">Apellidos:</label>
+        <input type="text" id="apellidosFormulario" name="apellidos_form" autofocus required><br>
+    <label for="dni">DNI:</label>
+        <input type="text" id="dniFormulario" name="dni_form" autofocus required><br>
+    <label for="correo">Correo Electrónico:</label>
+        <input type="text" id="mailFormulario" name="email_form" required><br>
+    <label for="fecha">Fecha de Nacimiento:</label>
+        <input type="date" id="fechaFormulario" name="date_form" autofocus required><br>
+    <label for="telefono">Teléfono:</label>
+        <input type="tel" id="telefonoFormulario" name="telefono_form" autofocus required><br> 
+    <input id="myInput" type="submit" value="Alta" >
+</form>
+
+
+<script>
+    function validar(){
+        var nombreFormulario,apellidosFormulario,dniFormulario,mailFormulario,fechaFormulario,telefonoFormulario;
+        nombre = document.getElementById("nombreFormulario").value;
+        apellidos = document.getElementById("apellidosFormulario").value;
+        dni = document.getElementById("dniFormulario").value;
+        email = document.getElementById("mailFormulario").value;
+        fecha = document.getElementById("fechaFormulario").value;
+        telefono = document.getElementById("telefonoFormulario").value;
+
+        expresion_email = /\w+@\w+\.+[a-z]/;
+        expresion_dni = /^\d{8}[A-Z]$/;
+            
+        if(!expresion_dni.test(dni)){
+            swal("Dni!", "El campo Dni no es correcto! (ej: 97857965X)", "error");
+            return false;
+        }
+        else if(!expresion_email.test(email)){
+            /* alert("error en el mail"); */
+            swal("Email!", "El campo email no es correcto!", "error");
+            return false;
+        }
+        else if(isNaN(telefono)){
+            swal("Teléfono!", "El campo teléfono no es correcto!", "error");
+            return false;
+        }
+       /*  else {
+            if(!await swal({text: 'Are you sure?', buttons: true})) {
+                return; }  
+        } */
+    }
+</script>
+{% endblock %}
