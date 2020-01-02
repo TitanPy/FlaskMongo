@@ -27,10 +27,20 @@
         fecha = document.getElementById("fechaFormulario").value;
         telefono = document.getElementById("telefonoFormulario").value;
 
-        expresion_email = /\w+@\w+\.+[a-z]/;
-        expresion_dni = /^\d{8}[A-Z]$/;
-            
-        if(!expresion_dni.test(dni)){
+        expresion_email = /\w+@\w+\.+[a-z]/;                        //Ej: xxxx@xxx.xx
+        expresion_dni = /^\d{8}[A-Z]$/;                             //Ej: 0000000H
+        expresion_nombre = /^[A-Z]{1}[a-z]/;                        //Ej: Manuel
+        expresion_apellidos = /^[A-Z]{1}[a-z]+\s+[A-Z]{1}[a-z]/;    //Ej: Perez Perez
+        
+        if(!expresion_nombre.test(nombre)){
+            swal("Nombre!", "El campo Nombre no es correcto! Debe comenzar por mayúscula", "error");
+            return false;
+        } 
+        else if(!expresion_apellidos.test(apellidos)){
+            swal("Apellidos!", "El campo Apellidos no es correcto! Deben comenzar por mayúscula", "error");
+            return false;
+        } 
+        else if(!expresion_dni.test(dni)){
             swal("Dni!", "El campo Dni no es correcto! (ej: 97857965X)", "error");
             return false;
         }
