@@ -3,19 +3,13 @@
 
 <br>
 <div class="row">
-    <div class="col-md-6">
-        <form method="POST" action="{{url_for('search_paciente')}}" >
-            <input class="form-control" name="paciente" type="text" placeholder="Search"
-                   aria-label="Search">
-        </form>
-    </div>
-</div>
-<div class="row">
     <div class="col-md-6"> <!-- css -->
-        <form method='POST' action="{{url_for('delete_user')}}">
-            <table id="webcam-table">
+        <input type="text" class="form-control pull-right" style="width:100%" id="search" placeholder="Search...">   
+        <form method='POST' action="{{url_for('delete_user')}}" >
+            <table id="mytable" class="table-bordered table pull-right" cellspacing="0" style="width: 100%;text-align: center;">
                 <thead>
                     <tr>
+                        <th>#</th>
                         <th>Name</th>
                         <th>Apellidos</th>
                         <th>Dni</th>
@@ -25,11 +19,16 @@
                     {% for pacientes in clientes %}
                     <td>
                         <input name="delete" type="checkbox" value='{{ pacientes.3 }}'>
-                        {{ pacientes.0 }}</td>
+                    </td>
                     <td>
-                        {{ pacientes.1 }}</td>
+                        {{ pacientes.0 }}
+                    </td>
                     <td>
-                        {{ pacientes.2 }}</td>
+                        {{ pacientes.1 }}
+                    </td>
+                    <td>
+                        {{ pacientes.2 }}
+                    </td>
                 </tbody>
                 {% endfor %}
             </table>
@@ -37,6 +36,23 @@
         </form> 
     </div>
 </div>
+
+<!-- JS Realiza busqueda tabla con AJAX -->
+<script>
+    // Write on keyup event of keyword input element
+    $(document).ready(function(){
+    $("#search").keyup(function(){
+    _this = this;
+    // Show only matching TR, hide rest of them
+    $.each($("#mytable tbody tr"), function() {
+    if($(this).text().toLowerCase().indexOf($(_this).val().toLowerCase()) === -1)
+    $(this).hide();
+    else
+    $(this).show();
+    });
+    });
+   });
+</script>
 
 <!-- Scripts javascript -->
 <!-- <script src = "{{ url_for('static', filename = 'js/sortable.js') }}" ></script> -->

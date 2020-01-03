@@ -16,6 +16,10 @@ c_alta = db["pacientes"]
 def altas():
     return render_template("altas.html")
 
+@app.route('/')
+def loging():
+    return render_template("login.html")
+
 @app.route('/altas',methods=['POST'])
 def altas_user():
     nombre = request.form.get('nombre_form')  
@@ -45,29 +49,11 @@ def delete_user():
     idUser = request.form.getlist('delete')
     if idUser:
         for _id in idUser: 
-            # aqui irá el mondo DELETE ID (revisar)
             print(_id)
             c_alta.remove({"_id":ObjectId(_id)})
-        return redirect(url_for('bajas_user '))
+        return redirect(url_for('bajas_user'))
     else:
         return abort(404)
-        # busqueda el formulario bajas breakpoint
-@app.route('/bajas',methods=['POST'])
-def search_paciente():
-   if request.method == 'POST':
-      paciente=request.form.getlist['paciente']
-      print(paciente)
-      lst_usuarios_search = []
-      return  render_template("bajas.html",clientes=lst_usuarios)
-      """  if paciente:
-        busqueda = c_alta.find(({"apellidos":/{0}/}).format(paciente))
-        for sch in busqueda: 
-            usuario = (data['nombre'],data['apellidos'],data['dni'],data['_id'])    
-            lst_usuarios_search.append(usuario)
-        return render_template('bajas.html', pacientes=lst_usuarios_search)
-      else:
-        return redirect('bajas') """
-
 
 if __name__=='__main__':
     app.run(port=3000, debug=True)
